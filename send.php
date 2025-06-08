@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <option value="">-- Selecciona un usuario --</option>
                     <?php while ($row = $usuarios_result->fetch_assoc()): ?>
                         <option value="<?php echo $row['id']; ?>">
-                            <?php echo htmlspecialchars($row['usuario']); ?>
+                            <?php echo $row['usuario']; ?>
                         </option>
                     <?php endwhile; ?>
                 </select>

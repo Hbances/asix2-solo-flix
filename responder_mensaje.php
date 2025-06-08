@@ -60,11 +60,11 @@ if (isset($_GET['id'])) {
     <h1>Responder mensaje</h1>
 
     <div class="panel panel-default">
-        <div class="panel-heading"><strong>Asunto:</strong> <?= htmlspecialchars($mensaje['asunto']) ?></div>
+        <div class="panel-heading"><strong>Asunto:</strong> <?= $mensaje['asunto']?></div>
         <div class="panel-body">
-            <p><strong>De:</strong> <?= htmlspecialchars($mensaje['remitente_nombre']) ?></p>
+            <p><strong>De:</strong> <?= $mensaje['remitente_nombre'] ?></p>
             <p><strong>Mensaje:</strong></p>
-            <p><?= nl2br(htmlspecialchars($mensaje['mensaje'])) ?></p>
+            <p><?= $mensaje['mensaje'] ?></p>
         </div>
     </div>
 
