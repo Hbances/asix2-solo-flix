@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif ($_SESSION['nivel'] == 0) {
                 echo "<a href='usuario0.php' class='btn btn-primary'>Volver a usuario 0</a>";
             } elseif ($_SESSION['nivel'] == 666) {
-                echo "<a href='gestion_usuarios.php' class='btn btn-primary'>Volver a usuario 66</a>";
+                echo "<a href='gestion_usuarios.php' class='btn btn-primary'>Volver a usuario 666</a>";
             }
         }
         ?>

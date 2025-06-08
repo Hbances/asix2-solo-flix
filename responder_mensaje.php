@@ -12,7 +12,7 @@ if (isset($_GET['id'])) {
     $mensajeId = $_GET['id'];
 
     // Obtener los detalles del mensaje al que se va a responder
-    $sql = "SELECT mensajes.asunto, mensajes.remitente_id, usuarios.usuario AS remitente_nombre 
+    $sql = "SELECT mensajes.asunto, mensajes.mensaje, mensajes.remitente_id, usuarios.usuario AS remitente_nombre 
             FROM mensajes
             JOIN usuarios ON mensajes.remitente_id = usuarios.id
             WHERE mensajes.id = ?";
@@ -30,17 +30,16 @@ if (isset($_GET['id'])) {
         $respuesta = $_POST['respuesta'];
 
         // Insertar la respuesta en la base de datos como un nuevo mensaje
-        $sqlInsert = "INSERT INTO mensajes (remitente_id, destinatario_id, asunto, mensaje, fecha_envio) 
-                      VALUES (?, ?, ?, ?, NOW())";
+        $sqlInsert = "INSERT INTO mensajes (remitente_id, destinatario_id, asunto, mensaje, fecha_envio, leido) 
+                      VALUES (?, ?, ?, ?, NOW(), 0)";
         $stmtInsert = $conn->prepare($sqlInsert);
         $stmtInsert->bind_param("iiss", $userId, $mensaje['remitente_id'], $mensaje['asunto'], $respuesta);
-        
 
         if ($stmtInsert->execute()) {
             header("location: inbox.php");
             exit();
         } else {
-            die("Error al enviar el mensaje: " . $stmt->error);
+            die("Error al enviar el mensaje: " . $stmtInsert->error);
         }
     }
 } else {
@@ -51,18 +50,28 @@ if (isset($_GET['id'])) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Responder Mensaje</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
 </head>
 <body>
 <div class="container">
-    <h1>Responder a: <?=($mensaje['asunto']) ?></h1>
+    <h1>Responder mensaje</h1>
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>Asunto:</strong> <?= htmlspecialchars($mensaje['asunto']) ?></div>
+        <div class="panel-body">
+            <p><strong>De:</strong> <?= htmlspecialchars($mensaje['remitente_nombre']) ?></p>
+            <p><strong>Mensaje:</strong></p>
+            <p><?= nl2br(htmlspecialchars($mensaje['mensaje'])) ?></p>
+        </div>
+    </div>
+
     <form action="responder_mensaje.php?id=<?= $mensajeId ?>" method="POST">
         <div class="form-group">
             <label for="respuesta">Tu respuesta:</label>
-            <textarea name="respuesta" id="respuesta" class="form-control" rows="5"></textarea>
+            <textarea name="respuesta" id="respuesta" class="form-control" rows="5" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Enviar Respuesta</button>
     </form>
